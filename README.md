@@ -28,7 +28,7 @@
 <!-- Blog Post and Explanation section -->
 <!-- Video Section -->
 <h3 align="center">See Meshery and it's plugins in-action</h3>
-    <img src="https://raw.githubusercontent.com/meshery/.github/master/profile/assets/img/meshery-dashboard-hero-image.png"  />
+    <img src="https://raw.githubusercontent.com/meshery/.github/master/profile/assets/img/meshery-dashboard-hero-image.png" alt="Meshery Dashboard" />
 <!--     <div align="center"><i>Example extension. See other <a href="https://meshery.io/extensions">Meshery Extensions</a>.<i></div>
     <br /> -->
     <!-- Repositories section -->
