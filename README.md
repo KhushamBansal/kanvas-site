@@ -9,7 +9,5 @@ This repository contains the website for **Kanvas** (Meshery extension).
 - Go (required for Hugo modules)
 
 ### Run locally
-
 ```bash
-cd site
-hugo server
+make site

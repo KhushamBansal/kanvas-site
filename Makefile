@@ -365,35 +365,6 @@ ui-integration-tests: ui-setup
 	cd ui; npm run ci-test-integration; cd ..
 
 #-----------------------------------------------------------------------------
-# Meshery Docs
-#-----------------------------------------------------------------------------
-#Incorporating Make docs commands from the Docs Makefile
-.PHONY: docs docs-build site docs-docker docs-mesheryctl
-jekyll=bundle exec jekyll
-
-site: docs
-site-serve: docs-serve
-
-## Run Meshery Docs. Listen for changes.
-docs:
-	cd docs; bundle install; bundle exec jekyll serve --drafts --incremental --config _config_dev.yml
-
-## Run Meshery Docs. Do not listen for changes.
-docs-serve:
-	cd docs; bundle install; bundle exec jekyll serve --drafts --config _config_dev.yml
-
-## Build Meshery Docs on your local machine.
-docs-build:
-	cd docs; $(jekyll) build --drafts
-
-## Run Meshery Docs in a Docker container. Listen for changes.
-docs-docker:
-	cd docs; docker run --name meshery-docs --rm -p 4000:4000 -v `pwd`:"/srv/jekyll" jekyll/jekyll:4.0 bash -c "bundle install; jekyll serve --drafts --livereload"
-
-## Build Meshery CLI docs
-docs-mesheryctl:
-	cd mesheryctl; make docs;
-#-----------------------------------------------------------------------------
 # Meshery Helm Charts
 #-----------------------------------------------------------------------------
 .PHONY: helm-docs helm-operator-docs helm-meshery-docs helm-operator-lint helm-lint
@@ -489,3 +460,24 @@ ifeq (,$(findstring $(GOVERSION), $(INSTALLED_GO_VERSION)))
 #	 Required golang version is: 'go$(GOVERSION).x'. \
 #	 Ensure go '$(GOVERSION).x' is installed and available in your 'PATH'.)
 endif
+
+.PHONY: site site-build
+
+site: ## Run Kanvas site locally (Hugo dev server)
+	cd site && hugo server -D && hugo mod tidy
+
+site-build: ## Build Kanvas site (minified output)
+	cd site && hugo --minify
+
+.PHONY: help
+
+help: ## Show all available make commands
+	@echo ""
+	@echo "Kanvas Site - Make Commands"
+	@echo "=========================="
+	@echo ""
+	@awk 'BEGIN {FS = ":.*##"} \
+	/^[a-zA-Z0-9_-]+:.*##/ { \
+		printf "  \033[36mmake %-22s\033[0m %s\n", $$1, $$2 \
+	}' Makefile
+	@echo ""
