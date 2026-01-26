@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const header = document.querySelector(".site-header");
     if (header) {
     ScrollTrigger.create({
-        start: "top -10", // when scroll > 10px
+        start: "top -2", // when scroll 2px
         onEnter: () => header.classList.add("scrolled"),
         onLeaveBack: () => header.classList.remove("scrolled"),
     });
