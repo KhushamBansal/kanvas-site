@@ -1,6 +1,6 @@
 ---
 title: "Kanvas"
-description: "Visual collaboration for cloud native infrastructure"
+description: "Collaboration for cloud native infrastructure"
 ---
 
 # Kanvas

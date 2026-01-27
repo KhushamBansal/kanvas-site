@@ -30,7 +30,7 @@ enableMissingTranslationPlaceholders = true
   dark-mode = true
   logo_light = "images/kanvas-logo-light.svg"
   logo_dark = "images/kanvas-logo-dark.svg"
-  description = "Visual cloud native management for Kubernetes"
+  description = "Collaborative cloud native management for Kubernetes"
 
 
 [module]
