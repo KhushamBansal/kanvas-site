@@ -1,16 +1,18 @@
 // 1. Imports
 @import "fonts_project";
 @import "_content_project";
-@import "modes.scss";
+@import "modes";
+@import "demo";
 @import "variables_project"; 
 @import "header";
 @import "hero";
 @import "modes";
-@import "demo";
 @import "capabilities";
 @import "community";
 @import "footer";
-@import "partners";
+@import "customers";
+@import "hero-glass";
+@import "browser";
 
 body {
   background-color: $dark;      

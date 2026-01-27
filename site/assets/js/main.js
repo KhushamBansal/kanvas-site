@@ -42,9 +42,9 @@ const animateCounters = () => {
     });
 };
 
-// 3. Partners Marquee 
+// 3. Customers Marquee 
 const initMarquee = () => {
-    const marquee = document.getElementById('partnersMarquee');
+    const marquee = document.getElementById('customersMarquee');
     if (!marquee) return; 
     marquee.innerHTML += marquee.innerHTML;
     const animation = gsap.to(marquee, {
