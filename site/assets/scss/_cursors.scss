@@ -1,0 +1,34 @@
+// Multi-Player Cursors Styles
+
+.multi-cursor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+  animation: floating 4s ease-in-out infinite;
+  
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+  }
+}
+
+// Floating animation for cursors
+@keyframes floating {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+// Ensure containers have proper positioning context
+[data-cursors] {
+  position: relative;
+  min-height: 300px; // Minimum height for cursor movement
+}
