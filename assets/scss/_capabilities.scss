@@ -1,0 +1,117 @@
+.capabilities-section {
+  padding: 50px 20px;
+  text-align: center;
+
+  .capabilities-header {
+    margin-bottom: 50px;
+
+    .capabilities-badge {
+      color: $casper;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $spacer * 0.75;
+      margin-bottom: 15px;
+
+      .dot {
+        display: inline-block; 
+        width: 8px;            
+        height: 8px;
+        background-color: $primary; 
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+    }
+
+    .capabilities-title {
+      margin-top: $spacer;
+      font-size: $font-size-base * 1.5;
+      color: $white;
+      margin-bottom: $spacer;
+      font-weight: 800;
+    }
+
+    .capabilities-subtitle {
+      color: $casper;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+
+  .capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: $spacer * 1.25;
+    max-width: 1140px;
+    margin: 2rem auto;
+    padding: 0 $spacer;
+
+    @media (max-width: 992px) { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 768px) { grid-template-columns: 1fr; }
+  }
+
+  .cap-card {
+    background: rgba($white, 0.03); 
+    border: 1px solid rgba($secondary, 0.2); 
+    border-radius: 8px;
+    padding: $spacer * 1.5;
+    text-align: left;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: $primary;
+      background: rgba($primary, 0.05);
+      transform: translateY(-5px);
+    }
+
+    .icon {
+      color: $primary;
+      font-size: $font-size-base * 1.5;
+      margin-bottom: $spacer * 1.25;
+    }
+
+    h3 {
+      font-size: $font-size-base * 1.25;
+      font-weight: $font-weight-medium;
+      margin-bottom: $spacer * 0.75;
+    }
+
+    p {
+      color: $casper;
+      font-size: $font-size-base * .875;
+      line-height: 1.5;
+      margin: 0;
+    }
+  }
+
+  // The bottom "Existing Stack" box
+  .cta-box {
+    margin-top: $spacer * 2;
+    background: rgba($secondary, 0.05);
+    border: 1px solid rgba($secondary, 0.1);
+    padding:$spacer $spacer * 2 $spacer * 2 $spacer * 2;
+    border-radius: 16px;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+
+    h3 { margin-bottom: $spacer; }
+    p { color: $casper; margin-bottom: $spacer * 1.5; font-size: $font-size-base * .75; }
+    
+    .btn-brand {
+      background-color: $primary;
+      color: $black;
+      padding: $spacer * 0.75 $spacer * 1.75;
+      border-radius: $border-radius;
+      font-weight: $font-weight-bold;
+      text-decoration: none;
+      transition: all 0.3s ease;
+
+      &:hover {
+        filter: brightness(1.1);
+        box-shadow: 0 4px 15px rgba($primary, 0.3);
+      }
+    }
+  }
+}

@@ -1,0 +1,284 @@
+
+.browser {
+  position: relative;
+  --browser-blue: #00B39F;
+  --browser-blue-deep: #00403f;
+  --browser-blue-soft: #00D3A9;
+  --browser-border: rgba(158, 255, 236, 0.45);
+  --browser-glow: rgba(0, 179, 159, 0.75);
+}
+
+.browser-shell {
+  position: relative;
+  max-width: 980px;
+  margin: 48px auto 0;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #111214;
+  border: 1px solid rgba(200, 200, 200, 0.08);
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6);
+}
+
+.browser-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(100, 100, 100, 0.06), transparent 45%);
+  pointer-events: none;
+}
+
+.browser-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 22px;
+  background: #1a1b1d;
+  border-bottom: 1px solid rgba(100, 100, 100, 0.06);
+}
+
+.browser-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.browser-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot-red {
+  background: #ff5f57;
+}
+
+.dot-yellow {
+  background: #febc2e;
+}
+
+.dot-green {
+  background: #28c840;
+}
+
+.browser-pill {
+  flex: 1;
+  justify-self: start;
+  max-width: 420px;
+  height: fit-content;
+  border-radius: 8px;
+  padding: 3px 16px;
+  color: #cbd2d9;
+  background: rgba(200, 200, 200, 0.08);
+  margin: 0 auto;
+  font-size: .9rem;
+}
+
+.browser-body {
+  position: relative;
+  min-height: 440px;
+  padding: 64px 32px;
+  display: grid;
+  place-items: center;
+  gap: 34px;
+  background: linear-gradient(180deg, #0b0f0c 0%, #0b120b 65%, #062006 100%);
+  overflow: hidden;
+}
+
+.browser-body::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 50%;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.browser-scene {
+  position: relative;
+  width: 280px;
+  height: 240px;
+  display: grid;
+  place-items: center;
+  perspective: 900px;
+  z-index: 4; 
+}
+
+.cube {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  transform-style: preserve-3d;
+  animation: cubeSpin 16s ease-in-out infinite, cubeFloat 6s ease-in-out infinite;
+}
+
+.face {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 12px;
+  border: 1px solid var(--browser-border);
+  background: linear-gradient(145deg, var(--browser-blue-soft) 0%, var(--browser-blue-deep) 100%);
+  box-shadow: inset 0 0 40px rgba(2, 12, 32, 0.35);
+  opacity: 0.95;
+}
+
+.face-front {
+  transform: translateZ(40px);
+}
+
+.face-right {
+  transform: rotateY(90deg) translateZ(40px);
+  background: linear-gradient(145deg, #006661 0%, #003B37 100%);
+}
+
+.face-left {
+  transform: rotateY(-90deg) translateZ(40px);
+  background: linear-gradient(145deg, #006661 0%, #003B37 100%);
+}
+
+.face-top {
+  transform: rotateX(90deg) translateZ(40px);
+  background: linear-gradient(145deg, var(--browser-blue-soft) 0%, #007763 100%);
+}
+
+.face-bottom {
+  transform: rotateX(-90deg) translateZ(40px);
+  background: linear-gradient(145deg, #003B37 0%, #002722 100%);
+}
+
+.cube-shadow {
+  position: absolute;
+  width: 180px;
+  height: 32px;
+  bottom: 30px;
+  background: radial-gradient(circle, rgba(0, 179, 159, 0.65), transparent 70%);
+  filter: blur(10px);
+  animation: shadowPulse 6s ease-in-out infinite;
+}
+
+.shine::before,
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: -60% -20%;
+  border-radius: inherit;
+  background: radial-gradient(
+    100% 100% at right,
+    rgba(12, 16, 28, 0.9),
+    rgba(178, 255, 240, 0.9) 8%,
+    rgba(0, 211, 169, 0.5) 40%,
+    transparent 80%
+  );
+  offset-path: inset(0 round 999px);
+  offset-anchor: 100% 50%;
+  animation: trail 10s infinite linear;
+  filter: blur(12px);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.shine.shine::before {
+  animation: trail 14s infinite linear;
+  opacity: 0.35;
+}
+
+.shine.shine::after {
+  animation: trail-offset 14s infinite linear;
+  offset-distance: 50%;
+  opacity: 0.5;
+}
+
+.browser-cta {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: rgba(14, 18, 28, 0.92);
+  border: 1px solid rgba(0, 211, 169, 0.5);
+  color: #e9fff9;
+  font-size: 0.98rem;
+  font-weight: 500;
+  box-shadow: 0 22px 50px rgba(8, 20, 60, 0.55);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.browser-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(120deg, rgba(0, 211, 169, 0.6), rgba(0, 102, 97, 0.15));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.cta-hexagon {
+  width: 18px;
+  height: 18px; /* (width * tan(60deg)) to maintain aspect ratio */
+  background: radial-gradient(circle, rgba(158, 255, 236, 0.9), rgba(0, 211, 169, 0.55));
+  box-shadow: 0 0 12px rgba(0, 211, 169, 0.6);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.cta-spark {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transform: rotate(45deg);
+  background: radial-gradient(circle, rgba(158, 255, 236, 0.9), rgba(0, 211, 169, 0.55));
+  box-shadow: 0 0 12px rgba(0, 211, 169, 0.6);
+}
+
+.cta-arrow {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(12, 16, 28, 0.9);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.cta-arrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-top: 2px solid rgba(158, 255, 236, 0.9);
+  border-right: 2px solid rgba(158, 255, 236, 0.9);
+  transform: rotate(45deg);
+}
+
+.browser-stand {
+  width: 220px;
+  height: 128px;
+  margin: 0 auto;
+  border-radius: 0 0 0px 00px;
+  background: linear-gradient(180deg, #1d251d, #0b120b);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+  position: relative;
+ 
+}
+
+.browser-stand::before {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 24px;
+  top: 108px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  // background: linear-gradient(180deg, #0d100d, #050805);
+  // box-shadow: inset 0 0 10px rgba(250, 250, 250, 0.45);
+  background: linear-gradient(to right,rgba(170, 204, 172, 0.082),color-mix(in srgb,#000 88%,#fff),rgba(170, 204, 172, 0.082));
+  
+}

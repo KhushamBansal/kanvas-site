@@ -1,0 +1,39 @@
+.customers-section {
+    padding: $td-block-space-top-base 0;
+    text-align: center;
+    overflow: hidden;
+    .customers-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .customers-title {
+        color: $casper;
+        font-family: $font-qanelas;
+        font-size: $font-size-base * .875;
+        margin-bottom: $spacer * 2;
+        text-transform: uppercase; 
+    }
+
+    .marquee-viewport {
+        overflow: hidden;
+        width: 100%;
+        mask-image: linear-gradient(to right, transparent, $black 15%, $black 85%, transparent);
+    }
+    .customers-logos {
+        display: flex;
+        align-items: center;
+        gap: $spacer * 2;
+        width: max-content; 
+
+        img {
+            height: 35px;
+            width: auto;
+            filter: invert(0.6);
+            // Force filter rendering
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+    }
+}
