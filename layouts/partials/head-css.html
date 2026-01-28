@@ -1,4 +1,4 @@
-{{ $scssMain := "scss/main.scss" -}}
+{{ $scssMain := "scss/_styles_project.scss" -}}
 {{ $css := resources.Get $scssMain
       | toCSS (dict "enableSourceMap" (not hugo.IsProduction)) -}}
 
