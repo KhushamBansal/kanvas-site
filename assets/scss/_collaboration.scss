@@ -194,25 +194,20 @@
                         }
 
                         &:nth-child(1) {
-                            color: #d946ef;
+                            color: #d946ef; // Sarah - Purple (keeping as is, no cursor-5 shown)
                         }
 
-                        // Sarah
                         &:nth-child(2) {
-                            color: #3b82f6;
+                            color: #359AC0; // Jorge - Blue from cursor-2.svg
                         }
 
-                        // Alex
                         &:nth-child(3) {
-                            color: #22c55e;
+                            color: #B91C1C; // Suzan - Red from cursor-3.svg
                         }
 
-                        // Jordan
                         &:nth-child(4) {
-                            color: #f97316;
+                            color: #6750A3; // Ryan - Purple from cursor-4.svg
                         }
-
-                        // Taylor
                     }
 
                     .status-dot {
