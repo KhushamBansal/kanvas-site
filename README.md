@@ -1,12 +1,12 @@
 <a href="https://meshery.io/kanvas">
-<img src="https://raw.githubusercontent.com/meshery/meshery/master/docs/assets/img/meshery-logo/meshery-logo-light-text-side.png" width="200px" align="right" />
+<img src="https://raw.githubusercontent.com/meshery/meshery/master/docs/assets/img/kanvas/kanvas-logo-light.png" width="180px" align="right" />
 </a>
 
 # Kanvas Site
 
 [![Slack](https://img.shields.io/badge/Slack-Join-brightgreen)](https://slack.meshery.io)
-[![Twitter](https://img.shields.io/twitter/follow/mesheryio.svg?style=social)](https://twitter.com/intent/follow?screen_name=mesheryio)
-[![GitHub](https://img.shields.io/github/stars/meshery/meshery.svg?style=social&label=Star)](https://github.com/meshery/meshery)
+[![Twitter](https://img.shields.io/twitter/follow/kanvas_new.svg?style=social)](https://x.com/intent/follow?screen_name=kanvas_new)
+[![GitHub](https://img.shields.io/github/stars/meshery-extensions/kanvas-site.svg?style=social&label=Star)](https://github.com/meshery-extensions/kanvas-site)
 
 This repository contains the website for the Meshery extension Kanvas - https://www.kanvas.new
 
