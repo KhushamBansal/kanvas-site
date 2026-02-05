@@ -1,5 +1,5 @@
 <a href="https://meshery.io/kanvas">
-  <img src="static/brand/kanvas/horizontal/kanvas-horizontal-white.svg" width="200px" align="right" />
+  <img src="static/brand/kanvas/horizontal/kanvas-horizontal-color.svg" width="200px" align="right" />
 </a>
 
 # Kanvas Site
