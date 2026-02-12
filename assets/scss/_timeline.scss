@@ -23,13 +23,11 @@
 
     // Timeline DVR Card Styles
     .timeline-card {
-        background: linear-gradient(
-            145deg,
-            #0f1a20,
-            #0c1117
-        );
-        border: 1px solid rgba(255,255,255,0.06);
-        box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+        background: linear-gradient(145deg,
+                #0f1a20,
+                #0c1117);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
         border-radius: 32px; // Larger rounded corners like Lovable
         overflow: hidden;
         box-shadow:
@@ -39,7 +37,6 @@
         -webkit-backdrop-filter: blur(28px) saturate(160%);
         font-family: 'Inter', sans-serif;
         position: relative;
-        z-index: 5;
 
         // Header
         .card-header {
