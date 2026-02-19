@@ -112,19 +112,6 @@ ul {
   opacity: 0.15;
 }
 
-.site-header {
-  max-width: 1200px;
-  margin: 26px auto 0;
-  padding: 16px 28px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  border-radius: 999px;
-  position: sticky;
-  top: 24px;
-  z-index: 5;
-}
-
 .brand {
   display: flex;
   align-items: center;
@@ -755,11 +742,6 @@ main {
 
 
 @media (max-width: 960px) {
-  .site-header {
-    flex-wrap: wrap;
-    border-radius: 28px;
-  }
-
   .nav-links {
     display: none;
   }
