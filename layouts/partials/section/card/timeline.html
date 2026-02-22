@@ -227,21 +227,26 @@
             }
         }
 
+        function getLastPassedEvent(pos) {
+            let passed = events[0];
+            for (const ev of events) {
+                if (parseFloat(ev.timestamp) <= pos) {
+                    passed = ev;
+                } else {
+                    break;
+                }
+            }
+            return passed;
+        }
+
         function handleScrub(e) {
             const rect = track.getBoundingClientRect();
             const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
             setScrubPosition(x * 100);
 
-            let closest = events[0];
-            let minDist = Infinity;
-            events.forEach(ev => {
-                const pos = parseFloat(ev.timestamp);
-                const dist = Math.abs(pos - x * 100);
-                if (dist < minDist) { minDist = dist; closest = ev; }
-            });
-
-            if (closest.id !== activeEvent.id) {
-                setActiveEvent(closest);
+            const passed = getLastPassedEvent(scrubPosition);
+            if (passed.id !== activeEvent.id) {
+                setActiveEvent(passed);
             }
         }
 
@@ -261,16 +266,9 @@
 
             setScrubPosition(newPos);
 
-            let closest = events[0];
-            let minDist = Infinity;
-            events.forEach(ev => {
-                const pos = parseFloat(ev.timestamp);
-                const dist = Math.abs(pos - newPos);
-                if (dist < minDist) { minDist = dist; closest = ev; }
-            });
-
-            if (closest.id !== activeEvent.id) {
-                setActiveEvent(closest);
+            const passed = getLastPassedEvent(newPos);
+            if (passed.id !== activeEvent.id) {
+                setActiveEvent(passed);
             }
 
             animRef = requestAnimationFrame(() => playTick(start, startPos));
