@@ -4,6 +4,7 @@
             <div class="visual-inner">
                 <!-- Timeline DVR Card -->
                 <div class="timeline-card">
+
                     <!-- Header -->
                     <div class="card-header">
                         <div class="header-left">
@@ -15,8 +16,8 @@
                                 </svg>
                             </div>
                             <div class="titles">
-                                <h3>Timeline DVR</h3>
-                                <p>24-Hour Recording • Camera 01</p>
+                                <h3>Deployment Playback</h3>
+                                <p>Timeline DVR</p>
                             </div>
                         </div>
                         <div class="header-right">
@@ -24,44 +25,68 @@
                                 <span class="dot"></span>
                                 LIVE
                             </span>
-                            <span class="segments-badge">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor" width="14" height="14">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                                4 Segments
-                            </span>
                         </div>
                     </div>
 
-                    <!-- Timeline -->
-                    <div class="timeline-track">
-                        <div class="segments">
-                            <div class="segment recording" style="left: 0%; width: 30%;"></div>
-                            <div class="segment motion" style="left: 32%; width: 38%;"></div>
-                            <div class="segment event" style="left: 72%; width: 18%;"></div>
-                            <div class="segment recording-alt" style="left: 92%; width: 8%;"></div>
+                    <!-- Active Event -->
+                    <div class="active-event-display">
+                        <div class="event-icon-box success" id="tmdvr-active-icon-box">
+                            <!-- Icon injected by JS -->
                         </div>
-                        <div class="playhead" style="left: 52%;"></div>
+                        <div class="event-details">
+                            <div class="event-header">
+                                <h4 id="tmdvr-active-title">Loading...</h4>
+                                <span class="status-badge success" id="tmdvr-active-status-badge">
+                                    <span class="dot"></span>
+                                    <span id="tmdvr-active-status-text">success</span>
+                                </span>
+                            </div>
+                            <p id="tmdvr-active-desc">---</p>
+                            <div class="event-meta">
+                                <span id="tmdvr-active-time">00:00:00</span>
+                                <span class="service-tag" id="tmdvr-active-service">---</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Track -->
+                    <div class="timeline-track">
+                        <div class="segments" id="tmdvr-track" style="cursor: pointer;">
+                            <div class="tmdvr-track-progress" id="tmdvr-track-progress"></div>
+                            <div id="tmdvr-event-markers"></div>
+                            <!-- Playhead lives inside segments so % coords are aligned -->
+                            <div class="playhead" id="tmdvr-scrub-head"></div>
+                        </div>
+                        <div class="time-labels">
+                            <span>09:00</span>
+                            <span>11:00</span>
+                            <span>13:00</span>
+                            <span>15:00</span>
+                            <span>17:30</span>
+                        </div>
                     </div>
 
                     <!-- Controls -->
                     <div class="card-controls">
                         <div class="playback-controls">
-                            <button class="control-btn">
+                            <button class="control-btn" id="tmdvr-btn-prev">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                                 </svg>
                             </button>
-                            <button class="control-btn pause-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <button class="control-btn pause-btn" id="tmdvr-btn-play">
+                                <svg id="tmdvr-icon-play" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                                <svg id="tmdvr-icon-pause" style="display: none;" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
                                 </svg>
                             </button>
-                            <button class="control-btn">
+                            <button class="control-btn" id="tmdvr-btn-next">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -69,89 +94,232 @@
                                 </svg>
                             </button>
                         </div>
-
                         <div class="time-display">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" width="16" height="16">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span class="current-time">12:45</span>
+                            <span class="current-time" id="tmdvr-time-display">09:00:12</span>
                             <span class="separator">/</span>
-                            <span class="total-time">24:00</span>
-                        </div>
-
-                        <div class="speed-control">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" width="16" height="16">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                            <span>1x</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" width="12" height="12">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
+                            <span class="total-time">17:30:00</span>
                         </div>
                     </div>
 
-                    <!-- Legend -->
-                    <div class="card-legend">
-                        <div class="legend-item">
-                            <span class="legend-dot recording"></span>
-                            <span>Recording</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-dot motion"></span>
-                            <span>Motion</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-dot event"></span>
-                            <span>Event</span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-        <!-- <div class="timeline-content">
-            <div class="icon-box">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </div>
-            <h2>Timeline DVR</h2>
-            <p>
-                Playback service transactions. Scrub through the history of changes to your deployments like a video
-                timeline.
-            </p>
-            <ul class="feature-list">
-                <li>
-                    <div class="check-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </div>
-                    Visual playback of deployment history
-                </li>
-                <li>
-                    <div class="check-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </div>
-                    Segment-based change detection
-                </li>
-                <li>
-                    <div class="check-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </div>
-                    Navigate through time with precision
-                </li>
-            </ul>
-        </div> -->
     </div>
 </section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const events = [
+            { id: "1", timestamp: "0%", time: "09:00:12", title: "Deploy v2.4.1", description: "Frontend service updated with new auth flow", type: "deploy", service: "frontend", status: "success" },
+            { id: "2", timestamp: "12%", time: "09:15:33", title: "Config Update", description: "Rate limiting rules adjusted for API gateway", type: "config", service: "api-gateway", status: "success" },
+            { id: "3", timestamp: "25%", time: "10:02:45", title: "Scale Up", description: "Auto-scaled payment service to 8 replicas", type: "scale", service: "payments", status: "success" },
+            { id: "4", timestamp: "38%", time: "11:18:02", title: "Deploy v3.0.0", description: "Major backend release with breaking changes", type: "deploy", service: "backend-api", status: "warning" },
+            { id: "5", timestamp: "50%", time: "12:30:00", title: "Security Patch", description: "CVE-2024-1234 patched across all services", type: "security", service: "all-services", status: "success" },
+            { id: "6", timestamp: "62%", time: "13:45:22", title: "Rollback v3.0.0", description: "Reverted backend to v2.9.8 due to latency spike", type: "rollback", service: "backend-api", status: "error" },
+            { id: "7", timestamp: "75%", time: "15:10:55", title: "Deploy v3.0.1", description: "Hotfix for connection pooling issue", type: "deploy", service: "backend-api", status: "success" },
+            { id: "8", timestamp: "88%", time: "16:42:10", title: "Scale Down", description: "Reduced replicas after traffic normalization", type: "scale", service: "payments", status: "success" },
+            { id: "9", timestamp: "96%", time: "17:30:00", title: "Config Update", description: "Updated TLS certificates for all endpoints", type: "config", service: "ingress", status: "success" },
+        ];
+
+        const typeIcons = {
+            deploy: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+            rollback: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.025 8.252a9 9 0 11-4.21-4.21M12.025 8.252V3.535M12.025 8.252l-4.717-4.717"/></svg>',
+            config: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>',
+            scale: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>',
+            security: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>',
+        };
+
+        let activeEvent = events[0];
+        let scrubPosition = 0;
+        let isPlaying = false;
+        let animRef = null;
+
+        // DOM Elements
+        const track = document.getElementById("tmdvr-track");
+        const trackProgress = document.getElementById("tmdvr-track-progress");
+        const scrubHead = document.getElementById("tmdvr-scrub-head");
+        const eventMarkersContainer = document.getElementById("tmdvr-event-markers");
+        const timeDisplay = document.getElementById("tmdvr-time-display");
+
+        // Header UI
+        const activeIconBox = document.getElementById("tmdvr-active-icon-box");
+        const activeTitle = document.getElementById("tmdvr-active-title");
+        const activeStatusBadge = document.getElementById("tmdvr-active-status-badge");
+        const activeStatusText = document.getElementById("tmdvr-active-status-text");
+        const activeDesc = document.getElementById("tmdvr-active-desc");
+        const activeTime = document.getElementById("tmdvr-active-time");
+        const activeService = document.getElementById("tmdvr-active-service");
+
+        // Buttons
+        const btnPlayPause = document.getElementById("tmdvr-btn-play");
+        const iconPlay = document.getElementById("tmdvr-icon-play");
+        const iconPause = document.getElementById("tmdvr-icon-pause");
+        const btnPrev = document.getElementById("tmdvr-btn-prev");
+        const btnNext = document.getElementById("tmdvr-btn-next");
+
+        function renderMarkers() {
+            eventMarkersContainer.innerHTML = "";
+            events.forEach(ev => {
+                const isActive = ev.id === activeEvent.id;
+                const marker = document.createElement("button");
+
+                let classes = ["tmdvr-marker"];
+                classes.push(ev.status);
+
+                if (isActive) {
+                    classes.push("active");
+                }
+
+                marker.className = classes.join(" ");
+                marker.style.left = ev.timestamp;
+
+                marker.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    setActiveEvent(ev);
+                    setScrubPosition(parseFloat(ev.timestamp));
+                    setIsPlaying(false);
+                });
+                eventMarkersContainer.appendChild(marker);
+            });
+        }
+
+        function updateActiveEventUI() {
+            activeTitle.textContent = activeEvent.title;
+            activeDesc.textContent = activeEvent.description;
+            activeTime.textContent = activeEvent.time;
+            timeDisplay.textContent = activeEvent.time;
+            activeService.textContent = activeEvent.service;
+
+            activeStatusText.textContent = activeEvent.status;
+
+            // Reset classes
+            activeStatusBadge.className = `status-badge ${activeEvent.status}`;
+            activeIconBox.className = `event-icon-box ${activeEvent.status}`;
+
+            activeIconBox.innerHTML = typeIcons[activeEvent.type] || typeIcons['deploy'];
+        }
+
+        function setScrubPosition(pos) {
+            scrubPosition = Math.max(0, Math.min(100, pos));
+            trackProgress.style.width = `${scrubPosition}%`;
+            scrubHead.style.left = `${scrubPosition}%`;
+        }
+
+        function setActiveEvent(ev) {
+            activeEvent = ev;
+            updateActiveEventUI();
+            renderMarkers();
+        }
+
+        function setIsPlaying(p) {
+            isPlaying = p;
+            if (isPlaying) {
+                iconPlay.style.display = "none";
+                iconPause.style.display = "block";
+            } else {
+                iconPlay.style.display = "block";
+                iconPause.style.display = "none";
+            }
+        }
+
+        function handleScrub(e) {
+            const rect = track.getBoundingClientRect();
+            const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            setScrubPosition(x * 100);
+
+            let closest = events[0];
+            let minDist = Infinity;
+            events.forEach(ev => {
+                const pos = parseFloat(ev.timestamp);
+                const dist = Math.abs(pos - x * 100);
+                if (dist < minDist) { minDist = dist; closest = ev; }
+            });
+
+            if (closest.id !== activeEvent.id) {
+                setActiveEvent(closest);
+            }
+        }
+
+        function playTick(start, startPos) {
+            if (!isPlaying) return;
+
+            const now = performance.now();
+            const elapsed = now - start;
+            const newPos = startPos + (elapsed / 80);
+
+            if (newPos >= 100) {
+                setScrubPosition(100);
+                setIsPlaying(false);
+                setActiveEvent(events[events.length - 1]);
+                return;
+            }
+
+            setScrubPosition(newPos);
+
+            let closest = events[0];
+            let minDist = Infinity;
+            events.forEach(ev => {
+                const pos = parseFloat(ev.timestamp);
+                const dist = Math.abs(pos - newPos);
+                if (dist < minDist) { minDist = dist; closest = ev; }
+            });
+
+            if (closest.id !== activeEvent.id) {
+                setActiveEvent(closest);
+            }
+
+            animRef = requestAnimationFrame(() => playTick(start, startPos));
+        }
+
+        // Event Listeners
+        track.addEventListener("mousedown", (e) => {
+            handleScrub(e);
+
+            const onMove = (ev) => handleScrub(ev);
+            const onUp = () => {
+                window.removeEventListener("mousemove", onMove);
+                window.removeEventListener("mouseup", onUp);
+            };
+
+            window.addEventListener("mousemove", onMove);
+            window.addEventListener("mouseup", onUp);
+        });
+
+        btnPlayPause.addEventListener("click", () => {
+            if (isPlaying) {
+                setIsPlaying(false);
+                if (animRef) cancelAnimationFrame(animRef);
+            } else {
+                if (scrubPosition >= 100) {
+                    setScrubPosition(0);
+                    setActiveEvent(events[0]);
+                }
+                setIsPlaying(true);
+                const startStr = performance.now();
+                const posStr = scrubPosition;
+                animRef = requestAnimationFrame(() => playTick(startStr, posStr));
+            }
+        });
+
+        function jumpTo(direction) {
+            const currentIdx = events.findIndex(e => e.id === activeEvent.id);
+            const newIdx = direction === "prev" ? Math.max(0, currentIdx - 1) : Math.min(events.length - 1, currentIdx + 1);
+            setActiveEvent(events[newIdx]);
+            setScrubPosition(parseFloat(events[newIdx].timestamp));
+            setIsPlaying(false);
+            if (animRef) cancelAnimationFrame(animRef);
+        }
+
+        btnPrev.addEventListener("click", () => jumpTo("prev"));
+        btnNext.addEventListener("click", () => jumpTo("next"));
+
+        // Initial render
+        setActiveEvent(events[0]);
+        setScrubPosition(0);
+    });
+</script>

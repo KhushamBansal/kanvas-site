@@ -1,50 +1,61 @@
 // Timeline DVR Component Styles
+// Uses only site variables: $primary, $secondary, $dark, $casper, $body-bg, $warning, $danger, $light
 
 .timeline-section {
     position: relative;
     overflow: hidden;
+    // Flex chain: grows within .workflow-card which is already display:flex flex-direction:column
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
     .container {
-        max-width: 1200px;
-        margin: 0 auto;
         padding: 0 24px;
-        display: grid;
-        gap: 60px;
-        align-items: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     .timeline-visual {
-        position: relative;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
 
         .visual-inner {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             background: transparent;
         }
     }
 
     // Timeline DVR Card Styles
     .timeline-card {
-        background: linear-gradient(145deg,
-                #0f1a20,
-                #0c1117);
+        background: linear-gradient(145deg, #0f1a20, #0c1117);
         border: 1px solid rgba(255, 255, 255, 0.06);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-        border-radius: 32px; // Larger rounded corners like Lovable
+        border-radius: 24px;
         overflow: hidden;
         box-shadow:
-            0 28px 70px rgba(2, 8, 20, 0.7),
-            0 0 40px rgba(0, 179, 159, 0.15); // Outer teal glow
+            0 20px 50px rgba(0, 0, 0, 0.7),
+            0 0 40px rgba($primary, 0.15);
         backdrop-filter: blur(28px) saturate(160%);
         -webkit-backdrop-filter: blur(28px) saturate(160%);
-        font-family: 'Inter', sans-serif;
+        font-family: $font-serif;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        flex: 1;
 
-        // Header
+        // Card Header
         .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 24px 28px; // Slightly more padding
+            padding: 20px 24px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
 
             .header-left {
                 display: flex;
@@ -54,13 +65,13 @@
                 .icon-box {
                     width: 40px;
                     height: 40px;
-                    background: rgba(0, 179, 159, 0.15);
+                    background: rgba($primary, 0.15);
                     border-radius: 12px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    color: #00D3A9;
-                    border: 1px solid rgba(0, 179, 159, 0.25);
+                    color: $secondary;
+                    border: 1px solid rgba($primary, 0.25);
 
                     svg {
                         width: 20px;
@@ -70,20 +81,16 @@
 
                 .titles {
                     h3 {
-                        font-size: 1.1rem; // Slightly larger
-                        font-weight: 700; // Bolder
+                        font-size: 1rem;
+                        font-weight: 600;
+                        color: white;
                         margin: 0;
                         line-height: 1.2;
-                        // Teal gradient matching website
-                        background: linear-gradient(90deg, #00B39F 0%, #00D3A9 100%);
-                        -webkit-background-clip: text;
-                        -webkit-text-fill-color: transparent;
-                        background-clip: text;
                     }
 
                     p {
                         font-size: 0.8rem;
-                        color: #94a3b8;
+                        color: $casper;
                         margin: 0;
                         line-height: 1.2;
                     }
@@ -100,153 +107,356 @@
                     align-items: center;
                     gap: 6px;
                     padding: 4px 10px;
-                    background: rgba(239, 68, 68, 0.1);
-                    border: 1px solid rgba(239, 68, 68, 0.3);
+                    background: rgba($danger, 0.1);
+                    border: 1px solid rgba($danger, 0.3);
                     border-radius: 12px;
                     font-size: 0.75rem;
                     font-weight: 600;
-                    color: #FCA5A5;
+                    color: $light;
                     letter-spacing: 0.05em;
 
                     .dot {
                         width: 6px;
                         height: 6px;
-                        background: #EF4444;
+                        background: $danger;
                         border-radius: 50%;
                         animation: pulse-live 2s ease-in-out infinite;
                     }
                 }
+            }
+        }
 
-                .segments-badge {
+        // Active Event Display — fixed height prevents width/layout jitter
+        .active-event-display {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba($dark, 0.4);
+            height: 108px;
+            overflow: hidden;
+            flex-shrink: 0;
+
+            .event-icon-box {
+                width: 44px;
+                height: 44px;
+                flex-shrink: 0;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+
+                &.success {
+                    background: rgba($primary, 0.15);
+                    color: $secondary;
+                    border: 1px solid rgba($primary, 0.25);
+                }
+
+                &.warning {
+                    background: rgba($warning, 0.15);
+                    color: $warning;
+                    border: 1px solid rgba($warning, 0.25);
+                }
+
+                &.error {
+                    background: rgba($danger, 0.15);
+                    color: $danger;
+                    border: 1px solid rgba($danger, 0.25);
+                }
+
+                svg {
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+
+            .event-details {
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+
+                .event-header {
                     display: flex;
                     align-items: center;
-                    gap: 6px;
-                    padding: 4px 10px;
-                    background: rgba(0, 179, 159, 0.1); // Teal background matching website
-                    border: 1px solid rgba(0, 179, 159, 0.25); // Teal border matching website
-                    border-radius: 12px;
-                    font-size: 0.75rem;
-                    font-weight: 500;
-                    color: #9EFFEC; // Pale Teal matching website
+                    gap: 10px;
+                    flex-wrap: nowrap;
+                    overflow: hidden;
 
-                    svg {
-                        color: #00D3A9; // Teal matching website
+                    h4 {
+                        font-size: 1.15rem;
+                        font-weight: 600;
+                        margin: 0;
+                        color: white;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        min-width: 0;
+                    }
+
+                    .status-badge {
+                        padding: 4px 10px;
+                        border-radius: 12px;
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                        flex-shrink: 0;
+
+                        .dot {
+                            width: 6px;
+                            height: 6px;
+                            border-radius: 50%;
+                        }
+
+                        &.success {
+                            background: rgba($primary, 0.1);
+                            color: $secondary;
+                            border: 1px solid rgba($primary, 0.25);
+
+                            .dot {
+                                background: $secondary;
+                            }
+                        }
+
+                        &.warning {
+                            background: rgba($warning, 0.1);
+                            color: $warning;
+                            border: 1px solid rgba($warning, 0.25);
+
+                            .dot {
+                                background: $warning;
+                            }
+                        }
+
+                        &.error {
+                            background: rgba($danger, 0.1);
+                            color: $danger;
+                            border: 1px solid rgba($danger, 0.25);
+
+                            .dot {
+                                background: $danger;
+                            }
+                        }
+                    }
+                }
+
+                p {
+                    margin: 0;
+                    font-size: 0.9rem;
+                    color: $casper;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .event-meta {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    font-size: 0.8rem;
+                    color: rgba($casper, 0.7);
+                    font-family: $font-family-monospace;
+
+                    .service-tag {
+                        background: rgba(255, 255, 255, 0.08);
+                        padding: 2px 8px;
+                        border-radius: 4px;
+                        border: 1px solid rgba(255, 255, 255, 0.1);
                     }
                 }
             }
         }
 
-        // Timeline Track
+        // Canvas area — equivalent to collaboration's .card-canvas
+        // Flex:1 means it absorbs all remaining height automatically
         .timeline-track {
             position: relative;
-            height: 200px; // Slightly taller
-            padding: 40px 28px;
+            padding: 28px 24px 16px;
             background: rgba(15, 23, 42, 0.4);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            // Grid lines matching collaboration card canvas
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+            background-size: 40px 40px;
 
             .segments {
                 position: relative;
                 width: 100%;
-                height: 120px; // Taller segments
-                background: rgba(30, 41, 59, 0.5);
-                border-radius: 16px; // More rounded
-                overflow: hidden;
-                box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3); // Inset shadow
+                height: 90px;
+                background: rgba($dark, 0.6);
+                border-radius: 12px;
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+                    inset 0 2px 8px rgba(0, 0, 0, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.04);
+                cursor: pointer;
+                overflow: visible;
 
-                .segment {
+                .tmdvr-track-progress {
                     position: absolute;
+                    left: 0;
+                    top: 0;
                     height: 100%;
-                    border-radius: 12px; // More rounded segments
-                    transition: all 0.3s ease;
-                    box-shadow:
-                        inset 0 1px 2px rgba(255, 255, 255, 0.1),
-                        0 2px 8px rgba(0, 0, 0, 0.2); // Inner glow effect
+                    width: 0%;
+                    background: linear-gradient(90deg, rgba($primary, 0.06), rgba($secondary, 0.2));
+                    border-radius: 11px;
+                    pointer-events: none;
+                    transition: none;
+                }
+
+                .tmdvr-marker {
+                    position: absolute;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    padding: 0;
+                    border: 1.5px solid rgba(255, 255, 255, 0.2);
+                    cursor: pointer;
+                    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    z-index: 5;
+                    opacity: 0.65;
 
                     &:hover {
-                        filter: brightness(1.2);
-                        transform: scaleY(1.05);
+                        opacity: 1;
+                        transform: translate(-50%, -50%) scale(1.5);
+                        border-color: rgba(255, 255, 255, 0.5);
                     }
 
-                    &.recording {
-                        background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+                    &.active {
+                        width: 14px;
+                        height: 14px;
+                        opacity: 1;
+                        z-index: 10;
+                        border-color: rgba(255, 255, 255, 0.6);
                     }
 
-                    &.recording-alt {
-                        background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+                    &.success {
+                        background: $primary;
+                        box-shadow: 0 0 6px rgba($primary, 0.5);
                     }
 
-                    &.motion {
-                        background: linear-gradient(135deg, #00D3A9 0%, #00B39F 100%); // Teal gradient
+                    &.warning {
+                        background: $warning;
+                        box-shadow: 0 0 6px rgba($warning, 0.5);
                     }
 
-                    &.event {
-                        background: linear-gradient(135deg, #DB2777 0%, #BE185D 100%);
+                    &.error {
+                        background: $danger;
+                        box-shadow: 0 0 6px rgba($danger, 0.5);
+                    }
+
+                    &.active.success {
+                        box-shadow: 0 0 16px rgba($primary, 0.9);
+                    }
+
+                    &.active.warning {
+                        box-shadow: 0 0 16px rgba($warning, 0.9);
+                    }
+
+                    &.active.error {
+                        box-shadow: 0 0 16px rgba($danger, 0.9);
+                    }
+                }
+
+                // Playhead — child of .segments so % coords align exactly with markers
+                .playhead {
+                    position: absolute;
+                    top: 0;
+                    height: 100%;
+                    width: 2px;
+                    background: linear-gradient(180deg,
+                            rgba($primary, 0.1) 0%,
+                            $primary 20%,
+                            $secondary 80%,
+                            rgba($secondary, 0.1) 100%);
+                    box-shadow: 0 0 14px rgba($secondary, 0.7);
+                    border-radius: 2px;
+                    z-index: 15;
+                    pointer-events: none;
+                    transform: translateX(-50%);
+                    will-change: left;
+
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        top: -5px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 11px;
+                        height: 11px;
+                        background: $secondary;
+                        border-radius: 50%;
+                        border: 2px solid #0c1117;
+                        box-shadow: 0 0 10px $secondary;
+                    }
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: -5px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 11px;
+                        height: 11px;
+                        background: $secondary;
+                        border-radius: 50%;
+                        border: 2px solid #0c1117;
+                        box-shadow: 0 0 10px $secondary;
                     }
                 }
             }
 
-            .playhead {
-                position: absolute;
-                top: 40px;
-                width: 3px;
-                height: 120px;
-                background: linear-gradient(180deg, #00B39F 0%, #00D3A9 100%); // Teal gradient
-                box-shadow: 0 0 16px rgba(0, 211, 169, 0.8); // Teal glow
-                border-radius: 2px;
-                z-index: 10;
+            // Time labels below the track
+            .time-labels {
+                display: flex;
+                justify-content: space-between;
+                padding: 0 1px;
+                margin-top: 10px;
 
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: -6px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    width: 12px;
-                    height: 12px;
-                    background: #00D3A9; // Teal
-                    border-radius: 50%;
-                    border: 2px solid white;
-                    box-shadow: 0 0 12px rgba(0, 211, 169, 0.9); // Teal glow
-                }
-
-                &::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -6px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    width: 12px;
-                    height: 12px;
-                    background: #00D3A9; // Teal
-                    border-radius: 50%;
-                    border: 2px solid white;
-                    box-shadow: 0 0 12px rgba(0, 211, 169, 0.9); // Teal glow
+                span {
+                    font-size: 0.7rem;
+                    color: rgba($casper, 0.5);
+                    font-family: $font-family-monospace;
+                    letter-spacing: 0.03em;
                 }
             }
         }
 
-        // Controls
+        // Controls Bar — matching collaboration .card-footer bg
         .card-controls {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 24px 28px; // More padding
+            padding: 20px 24px;
             background: rgba(5, 10, 20, 0.6);
             border-top: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
 
             .playback-controls {
                 display: flex;
                 gap: 10px;
+                align-items: center;
 
                 .control-btn {
                     width: 40px;
                     height: 40px;
-                    border-radius: 12px; // More rounded
+                    border-radius: 12px;
                     background: rgba(255, 255, 255, 0.03);
                     border: 1px solid rgba(255, 255, 255, 0.06);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    color: #cbd5e1;
+                    color: $casper;
                     cursor: pointer;
                     transition: all 0.2s;
 
@@ -262,15 +472,14 @@
                     }
 
                     &.pause-btn {
-                        // Teal gradient matching website
-                        background: linear-gradient(135deg, #00B39F 0%, #00D3A9 100%);
+                        background: linear-gradient(135deg, $primary 0%, $secondary 100%);
                         border: none;
-                        color: white;
-                        box-shadow: 0 4px 12px rgba(0, 179, 159, 0.3);
+                        color: $dark;
+                        box-shadow: 0 4px 12px rgba($primary, 0.3);
 
                         &:hover {
-                            background: linear-gradient(135deg, #00D3A9 0%, #9EFFEC 100%);
-                            box-shadow: 0 6px 16px rgba(0, 211, 169, 0.4);
+                            background: linear-gradient(135deg, $secondary 0%, $light 100%);
+                            box-shadow: 0 6px 16px rgba($secondary, 0.4);
                             transform: scale(1.08);
                         }
                     }
@@ -287,85 +496,26 @@
                 font-size: 0.95rem;
                 font-weight: 500;
                 border: 1px solid rgba(255, 255, 255, 0.05);
+                font-family: $font-family-monospace;
 
                 svg {
-                    color: #00D3A9; // Teal matching website
+                    color: $secondary;
                 }
 
                 .current-time {
                     font-weight: 700;
-                    // Teal gradient matching website
-                    background: linear-gradient(90deg, #00B39F 0%, #9EFFEC 100%);
+                    background: linear-gradient(90deg, $primary 0%, $light 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                     background-clip: text;
                 }
 
                 .separator {
-                    color: #64748b;
+                    color: rgba($casper, 0.3);
                 }
 
                 .total-time {
-                    color: #94a3b8;
-                }
-            }
-
-            .speed-control {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding: 10px 14px;
-                background: rgba(255, 255, 255, 0.03);
-                border: 1px solid rgba(255, 255, 255, 0.06);
-                border-radius: 12px;
-                font-size: 0.9rem;
-                font-weight: 600;
-                color: #cbd5e1;
-                cursor: pointer;
-                transition: all 0.2s;
-
-                svg:first-child {
-                    color: #F59E0B;
-                }
-
-                &:hover {
-                    background: rgba(255, 255, 255, 0.08);
-                    color: white;
-                    transform: scale(1.02);
-                }
-            }
-        }
-
-        // Legend
-        .card-legend {
-            display: flex;
-            gap: 24px;
-            padding: 16px 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-
-            .legend-item {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                font-size: 0.8rem;
-                color: #94a3b8;
-
-                .legend-dot {
-                    width: 12px;
-                    height: 12px;
-                    border-radius: 50%;
-
-                    &.recording {
-                        background: #7C3AED;
-                    }
-
-                    &.motion {
-                        background: #0891B2;
-                    }
-
-                    &.event {
-                        background: #DB2777;
-                    }
+                    color: rgba($casper, 0.5);
                 }
             }
         }
@@ -380,10 +530,11 @@
         transform: translate(-50%, -50%);
         width: 80%;
         height: 80%;
-        background: radial-gradient(circle, rgba(0, 179, 159, 0.15) 0%, transparent 70%); // Teal glow matching website
+        background: radial-gradient(circle, rgba($primary, 0.15) 0%, transparent 70%);
         filter: blur(100px);
         z-index: -1;
         opacity: 0.5;
+        pointer-events: none;
     }
 }
 
@@ -392,11 +543,11 @@
     0%,
     100% {
         opacity: 1;
-        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+        box-shadow: 0 0 0 0 rgba($danger, 0.7);
     }
 
     50% {
         opacity: 0.7;
-        box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+        box-shadow: 0 0 0 6px rgba($danger, 0);
     }
 }
