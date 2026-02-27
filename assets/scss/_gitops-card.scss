@@ -339,7 +339,8 @@ $gitops-blue: #3b82f6;
     left: 0;
     width: 2rem;
     background: linear-gradient(90deg, transparent, $primary, transparent);
-    animation: gitops-flow 1.5s linear infinite;
+    opacity: 0;
+    animation: gitops-flow 6s linear infinite;
 }
 
 .gitops-flow-paused .gitops-connector-flow {
@@ -349,23 +350,34 @@ $gitops-blue: #3b82f6;
 @keyframes gitops-flow {
     0% {
         transform: translateX(-100%);
+        opacity: 1;
+    }
+
+    25% {
+        transform: translateX(500%);
+        opacity: 1;
+    }
+
+    25.001% {
+        opacity: 0;
     }
 
     100% {
-        transform: translateX(500%);
+        opacity: 0;
+        transform: translateX(-100%);
     }
 }
 
 .gitops-connector-flow--2 {
-    animation-delay: 0.3s;
+    animation-delay: 1.5s;
 }
 
 .gitops-connector-flow--3 {
-    animation-delay: 0.6s;
+    animation-delay: 3s;
 }
 
 .gitops-connector-flow--4 {
-    animation-delay: 0.9s;
+    animation-delay: 4.5s;
 }
 
 // Status row
