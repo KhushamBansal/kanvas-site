@@ -1,4 +1,10 @@
 
+@property --border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
 :root {
   color-scheme: dark;
   // --bg: #05060b;
@@ -569,10 +575,18 @@ main {
 }
 
 .hero.glass::after {
-  background: linear-gradient(120deg, rgba(0, 179, 159, 0.86), rgba(0, 211, 169, 0.6), rgba(158, 255, 236, 0.64));
-  background-size: 220% 220%;
-  animation: borderShift 14s linear infinite, borderGlowDrift 16s ease-in-out infinite;
-  opacity: 0.85;
+  background: conic-gradient(
+    from var(--border-angle) at 50% 50%,
+    rgba(0, 179, 159, 0.1) 0deg,
+    rgba(0, 179, 159, 0.1) 238deg,
+    rgba(200, 255, 248, 0.96) 252deg,
+    rgba(0, 211, 169, 0.72) 266deg,
+    rgba(0, 179, 159, 0.28) 284deg,
+    rgba(0, 179, 159, 0.1) 308deg,
+    rgba(0, 179, 159, 0.1) 360deg
+  );
+  animation: borderSpin 7s linear infinite;
+  opacity: 1;
 }
 
 [data-tilt] {
@@ -698,6 +712,10 @@ main {
   100% {
     background-position: 0% 50%;
   }
+}
+
+@keyframes borderSpin {
+  to { --border-angle: 360deg; }
 }
 
 @keyframes borderGlowDrift {
