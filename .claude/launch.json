@@ -1,0 +1,22 @@
+{
+  "version": "0.0.1",
+  "autoVerify": false,
+  "configurations": [
+    {
+      "name": "kanvas-dev",
+      "runtimeExecutable": "make",
+      "runtimeArgs": ["site"],
+      "port": 1313,
+      "cwd": "${workspaceFolder}",
+      "autoPort": false
+    },
+    {
+      "name": "kanvas-clean",
+      "runtimeExecutable": "make",
+      "runtimeArgs": ["clean"],
+      "port": 1313,
+      "cwd": "${workspaceFolder}",
+      "autoPort": false
+    }
+  ]
+}
