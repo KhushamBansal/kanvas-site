@@ -1,6 +1,6 @@
 <section class="section browser">
   <div class="section-header centered">
-    <!-- <h2>Add the missing dimensions to your software</h2> -->
+    <h2>See Kanvas in Action</h2>
   </div>
   <div class="browser-shell">
     <div class="browser-header">
@@ -12,25 +12,16 @@
       <div class="browser-pill">https://kanvas.new</div>
     </div>
     <div class="browser-body">
-      <div class="browser-scene">
-        <!-- {/* Rotating Logo */} -->
-        <div class="logo-3d-container logo-float">
-            <div class="logo-3d">
-            <img 
-                src="/brand/kanvas/stacked/kanvas-stacked-partial-color.svg" 
-                alt="Kanvas Logo" 
-            />
+      <div class="browser-scene" id="browserScene">
+        <!-- Reunited 3D Logo — populated by JS when all 6 scroll pieces converge -->
+        <div class="reunited-float">
+          <div class="reunited-logo">
+            <div class="reunited-logo-inner" id="reunitedLogoInner">
+              <!-- 6 SVG pieces inserted here by initScrollPieces() -->
             </div>
+          </div>
+          <div class="reunited-glow"></div>
         </div>
-        <!-- Old cube -->
-        <!-- <div class="cube">
-          <span class="face face-front"></span>
-          <span class="face face-right"></span>
-          <span class="face face-left"></span>
-          <span class="face face-top"></span>
-          <span class="face face-bottom"></span>    
-        </div>
-        <div class="cube-shadow"></div> -->
       </div>
       <a class="browser-cta shine" style="margin-top:4rem;"href="https://layer5.io/kanvas">
         <span class="cta-hexagon"></span>

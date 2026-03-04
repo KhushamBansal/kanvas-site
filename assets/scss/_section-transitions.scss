@@ -1,0 +1,152 @@
+// ─── Scroll-Linked Animation Support ───
+// Continuous scrub-based parallax and transitions.
+// GSAP ScrollTrigger drives transforms directly;
+// these styles provide the structural support.
+
+// ─── Background Ambient Overlay ───
+// Fixed orbs that drift with scroll, creating color continuity between sections.
+.scroll-ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.scroll-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  will-change: transform, opacity;
+}
+
+.scroll-orb--1 {
+  width: 600px;
+  height: 600px;
+  top: 10%;
+  left: -5%;
+  background: radial-gradient(circle, rgba($primary, 0.1), transparent 70%);
+  opacity: 0.8;
+}
+
+.scroll-orb--2 {
+  width: 500px;
+  height: 500px;
+  top: 40%;
+  right: -10%;
+  background: radial-gradient(circle, rgba($secondary, 0.08), transparent 70%);
+  opacity: 0.6;
+}
+
+.scroll-orb--3 {
+  width: 450px;
+  height: 450px;
+  bottom: 10%;
+  left: 20%;
+  background: radial-gradient(circle, rgba($primary, 0.07), transparent 70%);
+  opacity: 0.5;
+}
+
+// ─── Hero Recession Wrapper ───
+// Injected by JS to separate GSAP recession from hero-glass.js tilt.
+.hero-recession {
+  will-change: transform, opacity;
+}
+
+// ─── Gradient Section Dividers ───
+.section-divider {
+  height: 1px;
+  max-width: 800px;
+  margin: 0 auto;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba($primary, 0.3) 20%,
+    rgba($secondary, 0.5) 50%,
+    rgba($primary, 0.3) 80%,
+    transparent
+  );
+  will-change: transform, opacity;
+  transform-origin: center;
+}
+
+// ─── Section Reveal Fallback (no-JS / reduced-motion) ───
+// These are NOT used when GSAP scrub is active.
+// They serve as graceful fallback for users with JS disabled
+// or reduced motion preference.
+.section-reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-reveal-children > * {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-reveal-children.is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+
+  @for $i from 1 through 12 {
+    &:nth-child(#{$i}) {
+      transition-delay: #{$i * 0.08}s;
+    }
+  }
+}
+
+// ─── Elevation System ───
+.elevation-1 {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.elevation-2 {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.elevation-3 {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.elevation-4 {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35), 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+// ─── Smooth scroll behavior ───
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .section-reveal-children > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .section-divider {
+    opacity: 1;
+    transition: none;
+  }
+
+  .scroll-ambient {
+    display: none;
+  }
+}
