@@ -64,7 +64,7 @@ If you use [Claude Code](https://claude.ai/code), run once after cloning:
 make setup-claude
 ```
 
-This copies agent definitions, skill templates, and hook configuration from `contrib/claude/` into your local `.claude/` directory (gitignored — your setup stays local).
+This copies agent definitions, skill templates, and hook configuration from `contrib/claude/` into your local `.claude/` directory.
 
 ### What you get
 

@@ -7,12 +7,23 @@
 #
 # Usage as a git pre-commit hook:
 #   ln -s ../../scripts/hooks/block-public-edits.sh .git/hooks/pre-commit
-#   When invoked by git, stdin is a terminal — the check is skipped automatically.
+#   When invoked by git, stdin is a terminal — staged paths are inspected and
+#   the commit is blocked if any files under public/ are included.
 
 set -euo pipefail
 
-# If stdin is a terminal (git hook context), nothing to check.
+# If stdin is a terminal, assume git pre-commit hook context and inspect staged files.
 if [ -t 0 ]; then
+  if git rev-parse --git-dir >/dev/null 2>&1; then
+    while IFS= read -r path; do
+      if [[ "$path" == public/* ]] || [[ "$path" == */public/* ]]; then
+        echo "ERROR: Cannot commit files in public/ — it is Hugo build output." >&2
+        echo "Edit source files in layouts/, assets/, static/, or content/ instead." >&2
+        echo "Run 'make build' to regenerate public/ from sources." >&2
+        exit 1
+      fi
+    done < <(git diff --cached --name-only)
+  fi
   exit 0
 fi
 
