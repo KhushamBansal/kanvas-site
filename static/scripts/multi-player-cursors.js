@@ -44,6 +44,9 @@
   const SOCIAL_PROOF_INTERVAL = 3600;
   const SOCIAL_PROOF_ACTIVITY_INTERVAL = 4200;
   const ACTIVITY_HIDE_DELAY = 1800;
+  const runtimeStateByContainer = new WeakMap();
+  const runtimeStates = new Set();
+  let hasVisibilityListener = false;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -254,6 +257,18 @@
     }
   }
 
+  function scheduleInitialCursorMovement(state, element) {
+    if (!state || !state.isActive) return;
+
+    const delay = getRandomInterval();
+    const timerId = window.setTimeout(() => {
+      state.cursorTimers.delete(element);
+      scheduleCursorMovement(state, element);
+    }, delay);
+
+    state.cursorTimers.set(element, timerId);
+  }
+
   function scheduleCursorMovement(state, element) {
     if (!state || !state.isActive) return;
 
@@ -285,12 +300,25 @@
     state.socialProofActivityIntervalId = null;
   }
 
+  function ensureSharedVisibilityListener() {
+    if (hasVisibilityListener) return;
+
+    document.addEventListener('visibilitychange', () => {
+      runtimeStates.forEach((state) => {
+        if (state && typeof state.updateLoopState === 'function') {
+          state.updateLoopState();
+        }
+      });
+    });
+    hasVisibilityListener = true;
+  }
+
   function startAnimationLoops(state) {
     if (!state || state.isActive) return;
 
     state.isActive = true;
     state.cursors.forEach((cursorElement) => {
-      scheduleCursorMovement(state, cursorElement);
+      scheduleInitialCursorMovement(state, cursorElement);
     });
 
     if (state.socialProofState) {
@@ -316,6 +344,7 @@
 
   function initCursors(container, cursorIndices = [0, 1]) {
     if (!container) return;
+    if (runtimeStateByContainer.has(container)) return;
 
     const cursors = [];
     const surface = container.closest('.canvas-preview') || container.parentElement || container;
@@ -325,8 +354,13 @@
       cursorTimers: new Map(),
       socialProofState: null,
       socialProofActivityIntervalId: null,
-      isActive: false
+      isActive: false,
+      intersectionObserver: null,
+      updateLoopState: null
     };
+
+    runtimeStateByContainer.set(container, runtimeState);
+    runtimeStates.add(runtimeState);
 
     cursorIndices.forEach((index) => {
       if (index >= CURSORS.length) return;
@@ -345,8 +379,20 @@
       updateSocialProofActivity(socialProofState, 'Live collaboration is active');
     }
 
-    let containerInView = true;
-    const updateLoopState = () => {
+    let containerInView = !('IntersectionObserver' in window);
+    runtimeState.updateLoopState = () => {
+      const containerIsMounted = document.body.contains(container);
+      if (!containerIsMounted) {
+        stopAnimationLoops(runtimeState);
+        if (runtimeState.intersectionObserver) {
+          runtimeState.intersectionObserver.disconnect();
+          runtimeState.intersectionObserver = null;
+        }
+        runtimeStates.delete(runtimeState);
+        runtimeStateByContainer.delete(container);
+        return;
+      }
+
       const shouldRun = containerInView && !document.hidden;
       if (shouldRun) {
         startAnimationLoops(runtimeState);
@@ -356,19 +402,19 @@
     };
 
     if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
+      runtimeState.intersectionObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.target !== container) return;
           containerInView = entry.isIntersecting;
-          updateLoopState();
+          runtimeState.updateLoopState();
         });
       }, { threshold: 0.1 });
 
-      observer.observe(container);
+      runtimeState.intersectionObserver.observe(container);
     }
 
-    document.addEventListener('visibilitychange', updateLoopState);
-    updateLoopState();
+    ensureSharedVisibilityListener();
+    runtimeState.updateLoopState();
   }
 
   function init() {
