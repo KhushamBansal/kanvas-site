@@ -47,6 +47,7 @@
   const runtimeStateByContainer = new WeakMap();
   const runtimeStates = new Set();
   let hasVisibilityListener = false;
+  let visibilityChangeHandler = null;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -72,6 +73,16 @@
       x: Math.floor(Math.random() * (maxX - minX + 1)) + minX,
       y: Math.floor(Math.random() * (maxY - minY + 1)) + minY
     };
+  }
+
+  function isElementPartiallyVisible(element) {
+    if (!element || !document.documentElement) return false;
+
+    const rect = element.getBoundingClientRect();
+    const viewWidth = window.innerWidth || document.documentElement.clientWidth;
+    const viewHeight = window.innerHeight || document.documentElement.clientHeight;
+
+    return rect.bottom > 0 && rect.right > 0 && rect.top < viewHeight && rect.left < viewWidth;
   }
 
   function setCursorPosition(element, pos, duration) {
@@ -300,16 +311,28 @@
     state.socialProofActivityIntervalId = null;
   }
 
+  function maybeRemoveSharedVisibilityListener() {
+    if (!hasVisibilityListener) return;
+    if (runtimeStates.size > 0) return;
+    if (!visibilityChangeHandler) return;
+
+    document.removeEventListener('visibilitychange', visibilityChangeHandler);
+    visibilityChangeHandler = null;
+    hasVisibilityListener = false;
+  }
+
   function ensureSharedVisibilityListener() {
     if (hasVisibilityListener) return;
 
-    document.addEventListener('visibilitychange', () => {
+    // This script has a page-level lifecycle, so a single shared listener is sufficient.
+    visibilityChangeHandler = () => {
       runtimeStates.forEach((state) => {
         if (state && typeof state.updateLoopState === 'function') {
           state.updateLoopState();
         }
       });
-    });
+    };
+    document.addEventListener('visibilitychange', visibilityChangeHandler);
     hasVisibilityListener = true;
   }
 
@@ -381,7 +404,7 @@
     }
 
     const hasIntersectionObserver = 'IntersectionObserver' in window;
-    let containerInView = hasIntersectionObserver ? false : true;
+    let containerInView = isElementPartiallyVisible(container);
     runtimeState.updateLoopState = () => {
       const containerIsMounted = document.body.contains(container);
       if (!containerIsMounted) {
@@ -392,6 +415,7 @@
         }
         runtimeStates.delete(runtimeState);
         runtimeStateByContainer.delete(container);
+        maybeRemoveSharedVisibilityListener();
         return;
       }
 
