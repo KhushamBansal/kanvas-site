@@ -68,7 +68,11 @@ const orb2 = document.querySelector('.scroll-orb--2');
 const orb3 = document.querySelector('.scroll-orb--3');
 if (orb1) {
     gsap.to(orb1, { y: -200, scrollTrigger: { scrub: 2, start: 'top top', end: 'bottom top' } });
+}
+if (orb2) {
     gsap.to(orb2, { y: -120, scrollTrigger: { scrub: 3, start: 'top top', end: 'bottom top' } });
+}
+if (orb3) {
     gsap.to(orb3, { y: -300, scrollTrigger: { scrub: 2.5, start: 'top top', end: 'bottom top' } });
 }
 ```
