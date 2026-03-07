@@ -49,6 +49,10 @@ setup-claude:
 	@mkdir -p .claude/agents .claude/skills/new-section
 	@cp contrib/claude/agents/*.md .claude/agents/
 	@cp contrib/claude/skills/new-section/SKILL.md .claude/skills/new-section/
+	@rm -rf .claude/skills/gsap-animations .claude/skills/scroll-animations .claude/skills/glass-morphism
+	@ln -s $(CURDIR)/.agents/skills/kanvas-animations/skills/gsap             .claude/skills/gsap-animations
+	@ln -s $(CURDIR)/.agents/skills/kanvas-animations/skills/scroll-animations .claude/skills/scroll-animations
+	@ln -s $(CURDIR)/.agents/skills/kanvas-animations/skills/glass-morphism   .claude/skills/glass-morphism
 	@cp contrib/claude/settings-template.json .claude/settings.json
 	@echo "Claude Code setup complete."
 	@echo "Set GITHUB_PERSONAL_ACCESS_TOKEN in your environment for GitHub MCP."
