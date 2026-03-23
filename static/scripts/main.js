@@ -115,10 +115,10 @@ const initScrollPieces = () => {
     const introSchedule = [
         { pieceIdx: 0, section: '.capabilities-section', startX: '-20vw', startY: '30vh', rotation: -30 },
         { pieceIdx: 2, section: '.customers-section', startX: '80vw', startY: '60vh', rotation: 20 },
-        { pieceIdx: 5, section: '.hero-section',      startX: '-15vw', startY: '40vh', rotation: -15 },
-        { pieceIdx: 1, section: '.demo-section',       startX: '85vw', startY: '55vh', rotation: 25 },
+        { pieceIdx: 5, section: '.hero-section', startX: '-15vw', startY: '40vh', rotation: -15 },
+        { pieceIdx: 1, section: '.demo-section', startX: '85vw', startY: '55vh', rotation: 25 },
         { pieceIdx: 3, section: '.capabilities-section', startX: '18vw', startY: '45vh', rotation: -20 },
-        { pieceIdx: 4, section: '.community-section',  startX: '82vw', startY: '35vh', rotation: 30 },
+        { pieceIdx: 4, section: '.community-section', startX: '82vw', startY: '35vh', rotation: 30 },
     ];
 
     // Create DOM for each floating piece
@@ -131,12 +131,12 @@ const initScrollPieces = () => {
         anchor.setAttribute('data-piece', i);
         anchor.innerHTML =
             '<div class="scroll-piece-stage">' +
-                '<div class="scroll-piece-body scroll-piece-body--depth-' + p.depth + '">' +
-                    '<svg viewBox="130 30 440 490" xmlns="http://www.w3.org/2000/svg">' +
-                        '<polygon points="' + p.points + '" fill="' + p.fill + '"/>' +
-                    '</svg>' +
-                '</div>' +
-                '<div class="scroll-piece-glow"></div>' +
+            '<div class="scroll-piece-body scroll-piece-body--depth-' + p.depth + '">' +
+            '<svg viewBox="130 30 440 490" xmlns="http://www.w3.org/2000/svg">' +
+            '<polygon points="' + p.points + '" fill="' + p.fill + '"/>' +
+            '</svg>' +
+            '</div>' +
+            '<div class="scroll-piece-glow"></div>' +
             '</div>';
         document.body.appendChild(anchor);
         anchors.push(anchor);
@@ -149,7 +149,7 @@ const initScrollPieces = () => {
     if (reunitedInner) {
         reunitedInner.innerHTML = pieces.map((p, i) =>
             '<svg class="reunited-piece reunited-piece--' + i + '" viewBox="130 30 440 490" xmlns="http://www.w3.org/2000/svg">' +
-                '<polygon points="' + p.points + '" fill="' + p.fill + '"/>' +
+            '<polygon points="' + p.points + '" fill="' + p.fill + '"/>' +
             '</svg>'
         ).join('');
     }
@@ -265,92 +265,116 @@ const initScrollPieces = () => {
 
     // ── Step 2: Convergence — pieces swoop from orbit into the browser screen ──
     if (reunitedFloat && browserSection) {
-        ScrollTrigger.create({
+        let convergenceTrigger;
+
+        convergenceTrigger = ScrollTrigger.create({
             trigger: browserSection,
-            start: 'top 30%',
-            once: true,
-            onEnter: () => {
-                requestAnimationFrame(() => {
-                    // Kill scroll-driven journeys before taking over with time-based tweens
-                    journeyTriggers.forEach(t => {
-                        if (t) {
-                            if (t.animation) t.animation.kill();
-                            t.kill();
-                        }
+            start: 'top 40%',
+            end: 'top 10%',
+            scrub: true,
+            onEnter: () => { },
+            onUpdate: (self) => {
+                if (convergenceTrigger.locked) return;
+
+                const progress = self.progress;
+
+                
+                if (progress <= 0) {
+                    if (convergenceTrigger.latched) {
+                        convergenceTrigger.latched = false;
+                        journeyTriggers.forEach(t => { if (t && t.getTween()) t.getTween().play(); });
+                    }
+                    return;
+                }
+
+                
+                if (!convergenceTrigger.latched) {
+                    convergenceTrigger.latched = true;
+                    journeyTriggers.forEach(t => { if (t && t.getTween()) t.getTween().pause(); });
+
+                    introSchedule.forEach(({ pieceIdx }) => {
+                        const a = anchors[pieceIdx];
+                        const b = bodies[pieceIdx];
+
+                        a.dataset.convStartX = parseFloat(gsap.getProperty(a, "x", "px"));
+                        a.dataset.convStartY = parseFloat(gsap.getProperty(a, "y", "px"));
+                        a.dataset.convStartScale = gsap.getProperty(a, "scale");
+                        a.dataset.convStartRotY = gsap.getProperty(b, "rotateY");
+                        a.dataset.convStartRotX = gsap.getProperty(b, "rotateX");
+                        a.style.zIndex = '100';
                     });
-                    anchors.forEach(a => {
-                        gsap.killTweensOf(a);
-                        a.style.zIndex = '100'; // above everything during swoop
+                }
+                const pathProgress = gsap.parseEase("sine.inOut")(progress);
+
+                const logoEl = document.querySelector('.reunited-logo');
+                if (!logoEl) return;
+
+                const logoRect = logoEl.getBoundingClientRect();
+                const logoCenterX = logoRect.left + logoRect.width / 2;
+                const finalLogoYOffset = -24;
+                const logoCenterY = logoRect.top + logoRect.height / 2 + finalLogoYOffset;
+
+                introSchedule.forEach(({ pieceIdx }, order) => {
+                    const anchor = anchors[pieceIdx];
+                    const body = bodies[pieceIdx];
+                    const glow = anchor.querySelector('.scroll-piece-glow');
+                    const svg = anchor.querySelector('svg');
+
+                    if (svg) gsap.set(svg, { opacity: 1 });
+                    if (glow) gsap.set(glow, { opacity: 1 - pathProgress });
+
+                    const startX = parseFloat(anchor.dataset.convStartX);
+                    const startY = parseFloat(anchor.dataset.convStartY);
+                    const startScale = parseFloat(anchor.dataset.convStartScale);
+                    const startRotY = parseFloat(anchor.dataset.convStartRotY);
+                    const startRotX = parseFloat(anchor.dataset.convStartRotX);
+
+                    const currentX = startX + (logoCenterX - startX) * pathProgress;
+                    const currentY = startY + (logoCenterY - startY) * pathProgress;
+
+                    gsap.set(anchor, {
+                        x: currentX,
+                        y: currentY,
+                        scale: startScale + (5.6 - startScale) * pathProgress
                     });
-                    bodies.forEach(b => gsap.killTweensOf(b));
 
-                    const logoEl = document.querySelector('.reunited-logo');
-                    if (!logoEl) return;
-
-                    const logoRect = logoEl.getBoundingClientRect();
-                    const logoCenterX = logoRect.left + logoRect.width / 2;
-                    const finalLogoYOffset = -24;
-                    const logoCenterY = logoRect.top + logoRect.height / 2 + finalLogoYOffset;
-
-                    let arrived = 0;
-                    introSchedule.forEach(({ pieceIdx }, order) => {
-                        const anchor = anchors[pieceIdx];
-                        const body = bodies[pieceIdx];
-                        const svg = anchor.querySelector('svg');
-                        const glow = anchor.querySelector('.scroll-piece-glow');
-
-                        if (glow) gsap.to(glow, { opacity: 0, duration: 0.15, overwrite: true });
-                        if (svg) gsap.set(svg, { opacity: 1 });
-
-                        gsap.to(anchor, {
-                            x: logoCenterX,
-                            y: logoCenterY,
-                            scale: 5.6,
-                            opacity: 1,
-                            duration: 0.25,
-                            delay: order * 0.045,
-                            ease: 'power2.inOut',
-                            overwrite: true,
-                            onComplete: () => {
-                                arrived++;
-                                if (arrived === introSchedule.length) {
-                                    gsap.to(anchors, {
-                                        scale: 5.72, duration: 0.14, ease: 'sine.out',
-                                        overwrite: true,
-                                        onComplete: () => {
-                                            gsap.to(anchors, {
-                                                scale: 5.6, duration: 0.2, ease: 'sine.inOut',
-                                                onComplete: () => {
-                                                    gsap.set(reunitedFloat, { opacity: 1 });
-                                                    gsap.fromTo(logoEl,
-                                                        { y: finalLogoYOffset - 40, scale: 0.94 },
-                                                        {
-                                                            y: finalLogoYOffset,
-                                                            scale: 1,
-                                                            duration: 0.9,
-                                                            ease: 'bounce.out',
-                                                            overwrite: true,
-                                                        }
-                                                    );
-                                                    anchors.forEach(a => {
-                                                        gsap.set(a, { opacity: 0 });
-                                                        a.style.zIndex = '-1';
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            }
-                        });
-
-                        gsap.to(body, {
-                            rotateY: 0, rotateX: 0,
-                            duration: 0.5, delay: order * 0.045, ease: 'sine.inOut',
-                            overwrite: true,
-                        });
+                    gsap.set(body, {
+                        rotateY: startRotY * (1 - pathProgress),
+                        rotateX: startRotX * (1 - pathProgress),
                     });
                 });
+
+                if (progress === 1) {
+                    if (!convergenceTrigger.bounced) {
+                        convergenceTrigger.bounced = true;
+                        convergenceTrigger.locked = true;
+                        gsap.set(reunitedFloat, { opacity: 1 });
+                        gsap.fromTo(logoEl,
+                            { y: finalLogoYOffset - 40, scale: 0.94 },
+                            {
+                                y: finalLogoYOffset,
+                                scale: 1,
+                                duration: 0.9,
+                                ease: 'bounce.out',
+                                overwrite: true,
+                            }
+                        );
+                        anchors.forEach(a => {
+                            gsap.set(a, { opacity: 0 });
+                            a.style.zIndex = '-1';
+                        });
+                    }
+                } else {
+                    if (convergenceTrigger.bounced) {
+                        convergenceTrigger.bounced = false;
+                        gsap.set(reunitedFloat, { opacity: 0 });
+                        gsap.set(logoEl, { y: 0, scale: 1 });
+                        anchors.forEach(a => {
+                            gsap.set(a, { opacity: 1 });
+                            a.style.zIndex = '100';
+                        });
+                    }
+                }
             }
         });
     }
@@ -512,7 +536,7 @@ const initScrollAnimations = () => {
             communitySection.querySelector('.community-badge'),
             communitySection.querySelector('.community-title'),
             communitySection.querySelector('.community-subtitle') ||
-              communitySection.querySelector('.capabilities-subtitle'),
+            communitySection.querySelector('.capabilities-subtitle'),
         ].filter(Boolean);
         scrubEach(comHeaderEls, { y: 40, opacity: 0 }, communitySection, 88, 50, 4);
 
@@ -559,20 +583,20 @@ const initScrollAnimations = () => {
 };
 
 const initVideoHandler = () => {
-  const wrapper = document.getElementById('video-wrapper');
-  const btn = document.getElementById('play-button-trigger');
+    const wrapper = document.getElementById('video-wrapper');
+    const btn = document.getElementById('play-button-trigger');
 
-  if (btn && wrapper) {
-    btn.addEventListener('click', () => {
-      const videoId = btn.getAttribute('data-video-id');
-      wrapper.innerHTML = `
+    if (btn && wrapper) {
+        btn.addEventListener('click', () => {
+            const videoId = btn.getAttribute('data-video-id');
+            wrapper.innerHTML = `
         <iframe 
           src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" 
           allow="autoplay; encrypted-media" 
           allowfullscreen>
         </iframe>`;
-    });
-  }
+        });
+    }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
