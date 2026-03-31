@@ -10,7 +10,7 @@
   left: 0;
   width: 0;
   height: 0;
-  z-index: -1; // behind content, subtle background continuity
+  z-index: 2; // above page background, below navbar
   pointer-events: none;
   will-change: transform;
   opacity: 0; // hidden until JS activates
@@ -60,22 +60,22 @@
 // 3D depth visual classes — pieces are subtle background elements
 .scroll-piece-body--depth-front {
   svg {
-    filter: drop-shadow(0 0 14px rgba(0, 211, 169, 0.15));
-    opacity: 0.35;
+    filter: drop-shadow(0 0 18px rgba(0, 211, 169, 0.4));
+    opacity: 0.7;
   }
 }
 
 .scroll-piece-body--depth-mid {
   svg {
-    filter: drop-shadow(0 0 10px rgba(0, 179, 159, 0.1));
-    opacity: 0.25;
+    filter: drop-shadow(0 0 14px rgba(0, 179, 159, 0.35));
+    opacity: 0.6;
   }
 }
 
 .scroll-piece-body--depth-back {
   svg {
-    filter: drop-shadow(0 0 8px rgba(0, 179, 159, 0.08));
-    opacity: 0.18;
+    filter: drop-shadow(0 0 10px rgba(0, 179, 159, 0.25));
+    opacity: 0.5;
   }
 }
 

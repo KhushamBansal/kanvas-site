@@ -161,7 +161,7 @@ const initScrollPieces = () => {
     }
 
     // ── Per-piece scroll journeys ──
-    // Store journey triggers so we can kill the scrubs when convergence fires
+    const introTriggers = [];
     const journeyTriggers = [];
 
     const browserSection = document.querySelector('.browser');
@@ -171,6 +171,7 @@ const initScrollPieces = () => {
         '.demo-section',
         '.capabilities-section',
         '.community-section',
+        '.feedback-section',
         '.browser',
     ];
 
@@ -183,10 +184,10 @@ const initScrollPieces = () => {
 
         // Start at position, scale 1 (50px stage)
         gsap.set(anchor, { x: startX, y: startY, scale: 1 });
-        gsap.set(body, { rotateY: rotation, rotateX: Math.random() * 910 - 5 });
+        gsap.set(body, { rotateY: rotation, rotateX: Math.random() * 10 - 5 });
 
         // Fade-in as intro section enters viewport
-        gsap.to(anchor, {
+        const introTween = gsap.to(anchor, {
             opacity: .8,
             scrollTrigger: {
                 trigger: triggerEl,
@@ -195,6 +196,7 @@ const initScrollPieces = () => {
                 scrub: 1,
             }
         });
+        introTriggers.push(introTween.scrollTrigger);
 
         // Journey: drift toward browser section center,
         // growing from scale 1 (50px) to scale 5.6 (280px)
@@ -276,6 +278,10 @@ const initScrollPieces = () => {
             onUpdate: (self) => {
                 if (convergenceTrigger.locked) return;
 
+                if (convergenceTrigger.maxProgress === undefined) convergenceTrigger.maxProgress = 0;
+                if (self.progress < convergenceTrigger.maxProgress) return;
+                convergenceTrigger.maxProgress = self.progress;
+
                 const progress = self.progress;
 
                 
@@ -348,6 +354,10 @@ const initScrollPieces = () => {
                     if (!convergenceTrigger.bounced) {
                         convergenceTrigger.bounced = true;
                         convergenceTrigger.locked = true;
+
+                        introTriggers.forEach(t => { if (t) t.kill(); });
+                        journeyTriggers.forEach(t => { if (t) t.kill(); });
+
                         gsap.set(reunitedFloat, { opacity: 1 });
                         gsap.fromTo(logoEl,
                             { y: finalLogoYOffset - 40, scale: 0.94 },
