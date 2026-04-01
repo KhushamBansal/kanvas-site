@@ -128,25 +128,4 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .section-reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .section-reveal-children > * {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .section-divider {
-    opacity: 1;
-    transition: none;
-  }
-
-  .scroll-ambient {
-    display: none;
-  }
-}
+// Removed prefers-reduced-motion check - animations forced to always show
