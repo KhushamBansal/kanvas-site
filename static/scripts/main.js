@@ -121,6 +121,10 @@ const initScrollPieces = () => {
         { pieceIdx: 4, section: '.community-section', startX: '82vw', startY: '35vh', rotation: 30 },
     ];
 
+    const pieceContainer = document.createElement('div');
+    pieceContainer.className = 'scroll-pieces-container';
+    document.body.appendChild(pieceContainer);
+
     // Create DOM for each floating piece
     const anchors = [];
     const bodies = [];
@@ -138,7 +142,7 @@ const initScrollPieces = () => {
             '</div>' +
             '<div class="scroll-piece-glow"></div>' +
             '</div>';
-        document.body.appendChild(anchor);
+        pieceContainer.appendChild(anchor);
         anchors.push(anchor);
         bodies.push(anchor.querySelector('.scroll-piece-body'));
     });
@@ -193,7 +197,7 @@ const initScrollPieces = () => {
                 trigger: triggerEl,
                 start: 'top 85%',
                 end: 'top 50%',
-                scrub: 1,
+                scrub: true,  // 1:1 scroll — no delay
             }
         });
         introTriggers.push(introTween.scrollTrigger);
@@ -222,7 +226,7 @@ const initScrollPieces = () => {
                 start: 'top 80%',
                 endTrigger: '.browser',
                 end: 'top 40%',
-                scrub: 2,
+                scrub: true,  // 1:1 scroll — no delay
             }
         });
         journeyTriggers.push(journey.scrollTrigger);
@@ -284,7 +288,7 @@ const initScrollPieces = () => {
 
                 const progress = self.progress;
 
-                
+
                 if (progress <= 0) {
                     if (convergenceTrigger.latched) {
                         convergenceTrigger.latched = false;
@@ -293,7 +297,7 @@ const initScrollPieces = () => {
                     return;
                 }
 
-                
+
                 if (!convergenceTrigger.latched) {
                     convergenceTrigger.latched = true;
                     journeyTriggers.forEach(t => { if (t && t.getTween()) t.getTween().pause(); });
@@ -387,6 +391,15 @@ const initScrollPieces = () => {
                 }
             }
         });
+    }
+
+    if (browserSection) {
+        const guardVisibility = () => {
+            const bottom = browserSection.getBoundingClientRect().bottom;
+            pieceContainer.style.visibility = bottom <= 0 ? 'hidden' : '';
+        };
+        window.addEventListener('scroll', guardVisibility, { passive: true });
+        guardVisibility();
     }
 };
 
@@ -625,16 +638,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("scroll", function () {
-  const btn = document.getElementById("button-scroll-to-up");
+    const btn = document.getElementById("button-scroll-to-up");
 
-  if (window.scrollY > 100) {
-    btn.classList.add("show");
-  } else {
-    btn.classList.remove("show");
-  }
+    if (window.scrollY > 100) {
+        btn.classList.add("show");
+    } else {
+        btn.classList.remove("show");
+    }
 });
 
 document.getElementById("button-scroll-to-up").addEventListener("click", function (e) {
-  e.preventDefault();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
 });

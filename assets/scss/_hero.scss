@@ -1,4 +1,6 @@
 .hero-section {
+  position: relative;
+  z-index: 3;
   padding: $spacer * 2 $spacer * 1.5;
   text-align: center;
   margin-top: 4vh;

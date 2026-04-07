@@ -4,6 +4,8 @@ $gitops-purple: #a78bfa;
 $gitops-blue: #3b82f6;
 
 .gitops-card-section {
+    position: relative;
+    z-index: 3;
     max-width: 900px;
 }
 
@@ -480,6 +482,8 @@ $gitops-blue: #3b82f6;
 
 //worflow section 
 .workflow-section {
+    position: relative;
+    z-index: 3;
     padding: 100px 0;
 }
 

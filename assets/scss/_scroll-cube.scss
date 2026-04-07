@@ -4,8 +4,16 @@
 // then reunites in the browser section.
 // Inspired by codewiki.google's floating 3D cube.
 
-.scroll-piece-anchor {
+.scroll-pieces-container {
   position: fixed;
+  inset: 0;
+  clip-path: inset(0);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.scroll-piece-anchor {
+  position: absolute; // relative to the clipping container (not the viewport directly)
   top: 0;
   left: 0;
   width: 0;
@@ -30,6 +38,7 @@
   transform-style: preserve-3d;
   will-change: transform;
 }
+
 // Safari gets a high-resolution initial raster for each SVG, but users still see the intended 50px starting size before enlargement. 
 .scroll-piece-body svg {
   width: 280px;
@@ -47,11 +56,9 @@
   bottom: -14px;
   left: 50%;
   transform: translateX(-50%);
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 179, 159, 0.08) 5%,
-    transparent 70%
-  );
+  background: radial-gradient(ellipse at center,
+      rgba(0, 179, 159, 0.08) 5%,
+      transparent 70%);
   filter: blur(12px);
   pointer-events: none;
   opacity: 0.5;
@@ -134,24 +141,27 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    transparent 50%
-  );
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      transparent 50%);
   pointer-events: none;
 }
 
 @keyframes reunitedRotate {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: rotateY(-18deg) rotateX(6deg);
   }
+
   25% {
     transform: rotateY(0deg) rotateX(2deg);
   }
+
   50% {
     transform: rotateY(18deg) rotateX(-4deg);
   }
+
   75% {
     transform: rotateY(0deg) rotateX(2deg);
   }
@@ -162,8 +172,15 @@
 }
 
 @keyframes reunitedFloat {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-18px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-18px);
+  }
 }
 
 .reunited-glow {
@@ -173,20 +190,25 @@
   bottom: -30px;
   left: 50%;
   transform: translateX(-50%);
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 179, 159, 0.18) 0%,
-    rgba(0, 211, 169, 0.06) 40%,
-    transparent 70%
-  );
+  background: radial-gradient(ellipse at center,
+      rgba(0, 179, 159, 0.18) 0%,
+      rgba(0, 211, 169, 0.06) 40%,
+      transparent 70%);
   filter: blur(18px);
   pointer-events: none;
   animation: glowPulse 7s ease-in-out infinite;
 }
 
 @keyframes glowPulse {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 // ─── Responsive ───
@@ -201,12 +223,29 @@
     height: 180px;
   }
 
-  .reunited-piece--0 { transform: translateZ(0px); }
-  .reunited-piece--1 { transform: translateZ(0px); }
-  .reunited-piece--2 { transform: translateZ(0px); }
-  .reunited-piece--3 { transform: translateZ(0px); }
-  .reunited-piece--4 { transform: translateZ(0px); }
-  .reunited-piece--5 { transform: translateZ(0px); }
+  .reunited-piece--0 {
+    transform: translateZ(0px);
+  }
+
+  .reunited-piece--1 {
+    transform: translateZ(0px);
+  }
+
+  .reunited-piece--2 {
+    transform: translateZ(0px);
+  }
+
+  .reunited-piece--3 {
+    transform: translateZ(0px);
+  }
+
+  .reunited-piece--4 {
+    transform: translateZ(0px);
+  }
+
+  .reunited-piece--5 {
+    transform: translateZ(0px);
+  }
 
   .reunited-glow {
     width: 200px;
@@ -219,13 +258,16 @@
   .scroll-piece-anchor {
     display: none;
   }
+
   .reunited-logo-inner {
     animation: none;
     transform: rotateY(-10deg) rotateX(4deg);
   }
+
   .reunited-float {
     animation: none;
   }
+
   .reunited-glow {
     animation: none;
     opacity: 0.7;
